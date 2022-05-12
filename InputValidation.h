@@ -91,11 +91,10 @@ void get_int_arr_from_line(int num_of_integers_inline, string line, std::ofstrea
 	if (counter != num_of_integers_inline)
 		invalid_input(outputFile);
 }
-// input n costs 1 int
-// input m costs 1 int
-// input edge costs 3 * m int
-// input edge to remove costs 2 int
-// validFileLength = 1 + 1 + 3 * m + 2;
+
+// input graph edge costs 3 * m * sizeof(int)
+// input edge to remove costs 2  * sizeof(int)
+// therefor validFileLength = 3 * m + 2 (+2 for n & m);
 
 void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFile, Graph& G)
 {
@@ -139,6 +138,7 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 		G.add_edge(edge.v, edge.u, edge.w);
 		countValidEdges += 3;
 	}
+
 	getline(inputFile, line);
 	get_int_arr_from_line(2, line, outputFile, getLineInput);
 	edge_to_delete->u = getLineInput[0];

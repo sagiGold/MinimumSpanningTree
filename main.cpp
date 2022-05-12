@@ -6,10 +6,6 @@
 #include "Kruskal.h"
 #include "Prim.h"
 
-using namespace std;
-using std::string;
-using std::fstream;
-
 /*Assumption from forum discusion :
 1) Kruskal gets sort-edges vector instead of doing so inside the algorithem.
 2) The two algorithem return the weight of the MST, not the graph itself.
