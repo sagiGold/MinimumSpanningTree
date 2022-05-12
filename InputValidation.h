@@ -1,6 +1,7 @@
 #ifndef  INPUT_VALIDATION_H
 #define INPUT_VALIDATION_H
 
+#include <sstream>
 #include <string>
 #include <fstream>
 #include <iostream>
@@ -74,6 +75,26 @@ void visit(Graph& g, vector<string>& colors, int vertex)
 	colors[vertex] = "B";
 }
 
+int* get_int_arr_from_line(int num_of_integers_inline, string line, std::ofstream& outputFile)
+{
+	string str, tmpIntToRead = "";
+	int* res = new int(num_of_integers_inline + 1);
+	int counter = 0;
+
+	stringstream stream(line);
+
+	while (!stream.eof()) {
+		counter += 1;
+		stream >> res[counter-1];
+		if (!stream || counter > num_of_integers_inline)
+			invalid_input(outputFile);
+	}
+	if (counter != num_of_integers_inline)
+		invalid_input(outputFile);
+
+	return res;
+
+}
 // input n costs 1 int
 // input m costs 1 int
 // input edge costs 3 * m int
@@ -84,16 +105,20 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 {
 	int n, m, dummy;
 	Edge edge;
+	string line;
 	fstream inputFile(file_name);
 
 	if (!inputFile.is_open()) {
 		cout << "File does not exist" << endl;
 		exit(1);
 	}
-	inputFile >> n;
-	inputFile >> m;
 
-	if (inputFile.fail() || n <= 0 || m < 0)
+	getline(inputFile, line);
+	n = *get_int_arr_from_line(1, line, outputFile);
+	getline(inputFile, line);
+	m = *get_int_arr_from_line(1, line, outputFile);
+
+	if (n <= 0 || m < 0)
 		invalid_input(outputFile);
 
 	int validFileLength = 3 * m + 2;
@@ -102,9 +127,11 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 	G.set_m(2 * m);
 	for (int i = 0; i < m; i++)
 	{
-		inputFile >> edge.u;
-		inputFile >> edge.v;
-		inputFile >> edge.w;
+		getline(inputFile, line);
+		get_int_arr_from_line(3, line, outputFile);
+		//inputFile >> edge.u;
+		//inputFile >> edge.v;
+		//inputFile >> edge.w;
 
 		if (inputFile.fail() || IsInvalidEdge(edge, n))
 			invalid_input(outputFile);
@@ -123,30 +150,6 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 	inputFile >> dummy;
 	if (!inputFile.eof())
 		invalid_input(outputFile);
-}
-
-int* get_int_arr_from_line(int num_of_integers_inline, std::istream& inputFile, std::ofstream& outputFile)
-{
-	string str, tmpIntToRead = "";
-	int i = 0;
-	int* res = new int(num_of_integers_inline);
-	std::getline(cin, str);
-
-	for (int j = 0; j < num_of_integers_inline; j++)
-	{
-		while (isdigit(str[i]))
-		{
-			tmpIntToRead += str[i];
-			i++;
-		}
-		if (str[i] != ' ' && str[i] != '\n')
-			invalid_input(outputFile);
-
-		res[j] = stoi(tmpIntToRead);
-		tmpIntToRead = "";
-	}
-
-	return res;
 }
 
 #endif // ! INPUT_VALIDATION_H
