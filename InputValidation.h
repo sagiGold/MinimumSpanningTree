@@ -75,10 +75,9 @@ void visit(Graph& g, vector<string>& colors, int vertex)
 	colors[vertex] = "B";
 }
 
-int* get_int_arr_from_line(int num_of_integers_inline, string line, std::ofstream& outputFile)
+void get_int_arr_from_line(int num_of_integers_inline, string line, std::ofstream& outputFile, int*& res)
 {
 	string str, tmpIntToRead = "";
-	int* res = new int(num_of_integers_inline + 1);
 	int counter = 0;
 
 	stringstream stream(line);
@@ -91,9 +90,6 @@ int* get_int_arr_from_line(int num_of_integers_inline, string line, std::ofstrea
 	}
 	if (counter != num_of_integers_inline)
 		invalid_input(outputFile);
-
-	return res;
-
 }
 // input n costs 1 int
 // input m costs 1 int
@@ -107,6 +103,7 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 	Edge edge;
 	string line;
 	fstream inputFile(file_name);
+	int* getLineInput = new int(4);
 
 	if (!inputFile.is_open()) {
 		cout << "File does not exist" << endl;
@@ -114,9 +111,11 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 	}
 
 	getline(inputFile, line);
-	n = *get_int_arr_from_line(1, line, outputFile);
+	get_int_arr_from_line(1, line, outputFile, getLineInput);
+	n = getLineInput[0];
 	getline(inputFile, line);
-	m = *get_int_arr_from_line(1, line, outputFile);
+	get_int_arr_from_line(1, line, outputFile, getLineInput);
+	m = getLineInput[0];
 
 	if (n <= 0 || m < 0)
 		invalid_input(outputFile);
@@ -128,10 +127,10 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 	for (int i = 0; i < m; i++)
 	{
 		getline(inputFile, line);
-		get_int_arr_from_line(3, line, outputFile);
-		//inputFile >> edge.u;
-		//inputFile >> edge.v;
-		//inputFile >> edge.w;
+		get_int_arr_from_line(3, line, outputFile, getLineInput);
+		edge.u = getLineInput[0];
+		edge.v = getLineInput[1];
+		edge.w = getLineInput[2];
 
 		if (inputFile.fail() || IsInvalidEdge(edge, n))
 			invalid_input(outputFile);
@@ -140,8 +139,10 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 		G.add_edge(edge.v, edge.u, edge.w);
 		countValidEdges += 3;
 	}
-	inputFile >> edge_to_delete->u;
-	inputFile >> edge_to_delete->v;
+	getline(inputFile, line);
+	get_int_arr_from_line(2, line, outputFile, getLineInput);
+	edge_to_delete->u = getLineInput[0];
+	edge_to_delete->v = getLineInput[1];
 	countValidEdges += 2;
 
 	if (inputFile.fail() || countValidEdges != validFileLength)
