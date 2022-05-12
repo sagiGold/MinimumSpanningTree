@@ -4,7 +4,7 @@
 #include "PriorityQueue.h"
 
 
- int Prim(Graph G)
+ int Prim(Graph& G)
 {
 	 int vertexU, MST_Weight = 0;
 	 int numOfVertexes = G.get_n() + 1; // vertex 0 is a dummy

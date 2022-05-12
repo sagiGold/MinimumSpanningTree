@@ -125,5 +125,29 @@ void BuildGraph(string file_name, Edge* edge_to_delete, std::ofstream& outputFil
 		invalid_input(outputFile);
 }
 
+int* get_int_arr_from_line(int num_of_integers_inline, std::istream& inputFile, std::ofstream& outputFile)
+{
+	string str, tmpIntToRead = "";
+	int i = 0;
+	int* res = new int(num_of_integers_inline);
+	std::getline(cin, str);
+
+	for (int j = 0; j < num_of_integers_inline; j++)
+	{
+		while (isdigit(str[i]))
+		{
+			tmpIntToRead += str[i];
+			i++;
+		}
+		if (str[i] != ' ' && str[i] != '\n')
+			invalid_input(outputFile);
+
+		res[j] = stoi(tmpIntToRead);
+		tmpIntToRead = "";
+	}
+
+	return res;
+}
+
 #endif // ! INPUT_VALIDATION_H
 

@@ -2,6 +2,7 @@
 #define GRAPH
 
 #include "LinkedList.h"
+#include <iostream>
 
 class item {
 public:
@@ -19,7 +20,7 @@ class Graph
 
 public:
 	Graph(int _n = 0) : n(_n) { make_empty_graph(n); }
-	~Graph() { }
+	~Graph() { delete[]  adj_list_arr; }
 
 	void set_m(int _m) { m = _m; }
 	const int get_n() { return n; }
